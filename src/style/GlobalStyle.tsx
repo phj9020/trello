@@ -30,8 +30,9 @@ export const GlobalStyle = createGlobalStyle`
     body {
         line-height: 1;
         font-family: 'Source Sans Pro', sans-serif;
-        background-color: "white";
+        background-color: ${(props) => props.theme.bgColor};
         color: "black";
+        
     }
     ol, ul {
         list-style: none;
