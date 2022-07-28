@@ -1,6 +1,8 @@
 import { GlobalStyle } from './style/GlobalStyle';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
 import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
+import { toDoState } from './atoms';
 
 const Wrapper = styled.div`
   display: flex;
@@ -33,11 +35,26 @@ const Card = styled.div`
   margin-bottom: 5px;
 `
 
-const toDos = ["a", "b", "c", "d"]
 
 function App() {
+  const [toDos, setToDos] = useRecoilState(toDoState);
   // when drag ends fn
-  const onDragEnd = () => { }
+  const onDragEnd = ({draggableId, destination, source} : DropResult) => { 
+    // destination 즉 목적지를 정하지 않을 시 예외처리 
+    // if(!destination) return;
+    // modify order in toToState
+    setToDos(oldeToDos => {
+      // splice 는 어레이 형태를 변형시키므로 copy 후 작업 
+      const toDosCopy = [...oldeToDos];
+      // Step1 : delete item on source.index
+      toDosCopy.splice(source?.index, 1);
+      // Step 2 : Put back the item on the destination.index 
+      // splice(start, 지울개수, 삽입항목);
+      toDosCopy.splice(destination?.index as number, 0, draggableId);
+      console.log(toDosCopy)
+      return toDosCopy;
+    })
+  }
   return (
     <>
       <GlobalStyle />
@@ -49,7 +66,7 @@ function App() {
                 (magic) =>
                 <Board ref={magic.innerRef} {...magic.droppableProps}>
                   {toDos.map((todo, index) =>
-                    <Draggable key={index} draggableId={todo} index={index}>
+                    <Draggable key={todo} draggableId={todo} index={index}>
                       {(provided) =>
                         <Card
                           ref={provided.innerRef}
