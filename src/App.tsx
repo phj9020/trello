@@ -41,7 +41,7 @@ function App() {
   // when drag ends fn
   const onDragEnd = ({draggableId, destination, source} : DropResult) => { 
     // destination 즉 목적지를 정하지 않을 시 예외처리 
-    // if(!destination) return;
+    if(!destination) return;
     // modify order in toToState
     setToDos(oldeToDos => {
       // splice 는 어레이 형태를 변형시키므로 copy 후 작업 
