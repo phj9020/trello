@@ -1,8 +1,9 @@
 import { GlobalStyle } from './style/GlobalStyle';
-import { DragDropContext, Draggable, Droppable, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { toDoState } from './atoms';
+import DraggableCard from './Components/DragabbleCard';
 
 const Wrapper = styled.div`
   display: flex;
@@ -28,12 +29,6 @@ const Board = styled.div`
   min-height: 200px;
   `
 
-const Card = styled.div`
-  border-radius: 5px;
-  padding: 10px;
-  background-color: ${(props) => props.theme.cardColor};
-  margin-bottom: 5px;
-`
 
 
 function App() {
@@ -50,7 +45,7 @@ function App() {
       toDosCopy.splice(source?.index, 1);
       // Step 2 : Put back the item on the destination.index 
       // splice(start, 지울개수, 삽입항목);
-      toDosCopy.splice(destination?.index as number, 0, draggableId);
+      toDosCopy.splice(destination?.index, 0, draggableId);
       console.log(toDosCopy)
       return toDosCopy;
     })
@@ -66,15 +61,7 @@ function App() {
                 (magic) =>
                 <Board ref={magic.innerRef} {...magic.droppableProps}>
                   {toDos.map((todo, index) =>
-                    <Draggable key={todo} draggableId={todo} index={index}>
-                      {(provided) =>
-                        <Card
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}>
-                          {todo}
-                        </Card>}
-                    </Draggable>
+                    <DraggableCard key={index} todo={todo} index={index} />
                   )}
                   {/* dragable을 밖으로 빼도 사이즈가 그대로를 유지하게 만듦 placehoder */}
                   {magic.placeholder}
