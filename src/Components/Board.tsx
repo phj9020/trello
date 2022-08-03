@@ -14,6 +14,12 @@ const SingleBoard = styled.div`
     margin: 20px 0px;
 `
 
+const BoardTitle = styled.h2`
+    margin-bottom:10px;
+    font-weight: 800;
+    text-align: center;
+`
+
 interface IBoard {
     toDos: string[];
     boardId: string;
@@ -25,13 +31,16 @@ function Board({toDos, boardId } :IBoard ) {
             <Droppable droppableId={boardId} >
                 {
                 (magic) =>
+                <>
                 <SingleBoard ref={magic.innerRef} {...magic.droppableProps}>
+                    <BoardTitle>{boardId}</BoardTitle>
                     {toDos.map((todo, index) =>
-                    <DraggableCard key={index} todo={todo} index={index} />
+                        <DraggableCard key={index} todo={todo} index={index} />
                     )}
                     {/* dragable을 밖으로 빼도 사이즈가 그대로를 유지하게 만듦 placehoder */}
                     {magic.placeholder}
                 </SingleBoard>
+                </>
                 }
             </Droppable>
     )
