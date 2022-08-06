@@ -30,10 +30,11 @@ function App() {
   const [toDos, setToDos] = useRecoilState(toDoState);
   // when drag ends fn
   const onDragEnd = (info : DropResult) => { 
-    console.log(info)
+    console.log("info",info)
     const { destination, draggableId, source} = info;
-    
-    // 만약, 같은 보드에서 움직인다면, same board movement 
+    // case 1 : 도착할 곳을 정하지 않을 경우
+    if(!destination) return;
+    // case 2 : 만약, 같은 보드에서 움직인다면, same board movement 
     if(destination?.droppableId === source.droppableId) {
       setToDos((allBoards) => {
         console.log("allBoards",allBoards)
@@ -51,6 +52,20 @@ function App() {
         };
       });
     };
+    // case 3 : 다른 보드로 움직일 경우
+    if(destination?.droppableId !== source.droppableId) {
+      setToDos((allBoards) => {
+        const sourceBoard = [...allBoards[source.droppableId]];
+        const destinationBoard = [...allBoards[destination?.droppableId]];
+        sourceBoard.splice(source?.index, 1);
+        destinationBoard.splice(destination?.index, 0, draggableId);
+        return {
+          ...allBoards,
+          [source.droppableId] : sourceBoard,
+          [destination?.droppableId] : destinationBoard
+        }
+      })
+    }
 
   }
   return (
