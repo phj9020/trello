@@ -38,10 +38,16 @@ const BoardTitle = styled.h2`
 `
 const Form = styled.form`
     width: 100%;
+    display:flex;
+    justify-content: center;
     input {
-        width:100%;
+        width:80%;
+        padding:5px;
+        text-align: center;
     }
 `
+
+
 
 interface IBoard {
     toDos: IToDo[];
@@ -64,6 +70,7 @@ function Board({toDos, boardId } :IBoard ) {
         };
         // set newToDo in recoil state 
         setToDos(allBoards => {
+            console.log(allBoards, boardId)
             // 기존 보드들을 넣어주고 추가하는 특정 보드안에 있었던 항목도 넣어주고 newToDo를 넣어줘야한다. (순서는 마지막에 넣는것으로)
             return {
                 ...allBoards,
