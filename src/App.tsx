@@ -31,7 +31,7 @@ function App() {
   // when drag ends fn
   const onDragEnd = (info : DropResult) => { 
     console.log("info",info)
-    const { destination, draggableId, source} = info;
+    const { destination, source} = info;
     // case 1 : 도착할 곳을 정하지 않을 경우
     if(!destination) return;
     // case 2 : 만약, 같은 보드에서 움직인다면, same board movement 
@@ -40,11 +40,14 @@ function App() {
         console.log("allBoards",allBoards)
         // splice 는 어레이 형태를 변형시키므로 copy 후 작업 
         const boardCopy = [...allBoards[source.droppableId]];
+        // grab target object before delete it from boardCopy
+        const taskObj = boardCopy[source.index];
+        console.log("taskObject",taskObj)
         // Step1 : delete item on source.index
         boardCopy.splice(source?.index, 1);
         // Step 2 : Put back the item on the destination.index 
-        // splice(start, 지울개수, 삽입항목);
-        boardCopy.splice(destination?.index, 0, draggableId);
+        // splice(start, 지울개수, 삽입항목: 여기선 object를 넣음);
+        boardCopy.splice(destination?.index, 0, taskObj);
         console.log(boardCopy)
         return {
           ...allBoards,
@@ -56,9 +59,11 @@ function App() {
     if(destination?.droppableId !== source.droppableId) {
       setToDos((allBoards) => {
         const sourceBoard = [...allBoards[source.droppableId]];
+        // grab target object before delete it from boardCopy
+        const taskObj = sourceBoard[source.index];
         const destinationBoard = [...allBoards[destination?.droppableId]];
         sourceBoard.splice(source?.index, 1);
-        destinationBoard.splice(destination?.index, 0, draggableId);
+        destinationBoard.splice(destination?.index, 0, taskObj);
         return {
           ...allBoards,
           [source.droppableId] : sourceBoard,

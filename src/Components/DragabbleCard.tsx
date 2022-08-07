@@ -13,21 +13,22 @@ box-shadow : ${props => props.isDragging ? "0px 2px 5px rgba(0,0,0,0.05)" : "non
 `
 
 interface IDraggableCardProps {
-    todo: string;
+    todoId: number;
+    todoText: string;
     index: number;
 }
 
-function DraggableCard({todo, index}: IDraggableCardProps) {
-    console.log(todo, "has been rendered")
+function DraggableCard({todoId, todoText, index}: IDraggableCardProps) {
+    console.log(todoText, "has been rendered")
     return (
-        <Draggable key={todo} draggableId={todo} index={index}>
+        <Draggable key={todoId} draggableId={todoId+""} index={index}>
             {(provided, snapshot) =>
                 <Card
                     isDragging={snapshot.isDragging}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}>
-                    {todo}
+                    {todoText}
                 </Card>}
         </Draggable>
                         
